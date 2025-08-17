@@ -10,23 +10,16 @@ function getComputerChoice(){
     return game[value];
 }
 
-// get the player choice
-function getHumanChoice() {
-    let choice = prompt("Select rock, scissors, or paper");
-    if (choice===null) {
-        choice = null;
-    } else {
-        choice = choice.toLowerCase().trim();
-    return choice;
-}}
-
-
 // Declare player score
 let humanScore =0;
 let computerScore =0;
 
 //play a single round
-function playRound(humanChoice, computerChoice) {
+function playRound(humanChoice,computerChoice) {
+
+    // computerChoice = getComputerChoice();
+    // humanChoice = getHumanChoice;
+    console.log(`Player:${humanChoice} Computer: ${computerChoice}`);
 
     let value;
     if (humanChoice===null) {
@@ -45,30 +38,55 @@ function playRound(humanChoice, computerChoice) {
         computerScore +=1;
         value = "You lose this round";
     };
+    
+    div.textContent = `Player'score:${humanScore} Computer's score: ${computerScore}`;
+    if (humanScore===5 && computerScore < 5){
+        alert("Congratulation, You are the champion!");
+    }
+    else if (computerScore === 5 && humanScore < 5){
+        alert("The computer won this round");
+    }
+    if(humanScore === 5 || computerScore===5){
+        let askPlayer = prompt("Do you want to restart?, Y/N").toUpperCase();
+        if (askPlayer === "Y")  {
+            humanScore = 0;
+            computerScore = 0;
+        }
+        else {
+            alert("Game Over!")
+        }
+    }
     return value;
 }
 
 
-// Play numberOfPlay rounds
-function playGame (numberOfPlay) {
-    while (numberOfPlay>0) {
-        const computerChoice = getComputerChoice();
-        const humanChoice = getHumanChoice();
-        console.log(`Player:${humanChoice} Computer: ${computerChoice}`);
-        console.log(playRound(humanChoice,computerChoice));
-        numberOfPlay -=1;
+
+getHumanChoice =  (event) =>{
+    let target = event.target;
+    let humanChoice = null;
+
+    switch(target.id) {
+        case 'rock':
+            humanChoice = 'rock';
+            break;
+        case 'paper':
+            humanChoice = 'paper';
+            break;
+        case 'scissors':
+            humanChoice = 'scissors';
+            break;
     }
-    if (numberOfPlay === 0) {
-        let askPlayer = prompt("Do you want to restart?, Y/N").toUpperCase();
-        if (askPlayer === "Y")  {
-            numberOfPlay = 5;
-        }
-        else {
-            console.log("Game Over!")
-        }
-        }
-        return `You have ${numberOfPlay} lives left!`;
+    if(humanChoice) {
+        let computerChoice = getComputerChoice();
+        let result = playRound(humanChoice,computerChoice);
+        alert(result);
+    }
 }
+let buttonAction = document.querySelector('#buttonAction');
+buttonAction.addEventListener('click', getHumanChoice);
 
+const body = document.querySelector('body');
+const div = document.createElement('div');
 
-console.log(playGame(5));
+body.appendChild(div);
+document.body.insertBefore(div, document.body.firstChild)
